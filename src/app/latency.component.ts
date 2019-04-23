@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'Latency',
+  templateUrl: './latency.component.html',
+  styleUrls: ['./latency.component.css']
 })
-export class AppComponent implements OnInit {
+export class LatencyComponent implements OnInit {
   constructor() { }
   public barChartOptions = {
     scaleShowVerticalLines: false,

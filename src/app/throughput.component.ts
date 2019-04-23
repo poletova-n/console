@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'Throughput',
+  templateUrl: './throughput.component.html',
+  styleUrls: ['./throughput.component.css']
 })
-export class AppComponent implements OnInit {
+export class ThroughputComponent implements OnInit {
   constructor() { }
   public barChartOptions = {
     scaleShowVerticalLines: false,
