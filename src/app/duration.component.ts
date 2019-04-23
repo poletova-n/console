@@ -8,7 +8,7 @@ import {formatDate} from "@angular/common";
   providers: [ConfigService]
 })
 export class DurationComponent implements OnInit {
-  constructor(private configService: ConfigService, private ref: ChangeDetectorRef) {
+  constructor(private configService: ConfigService) {
     this.showConfig = this.showConfig.bind(this);
   }
   public barChartOptions = {
@@ -27,10 +27,15 @@ export class DurationComponent implements OnInit {
       .subscribe((data:Result) =>  {
         this.barChartData[0].data.push(data.data.result[0].value[1]);
         this.barChartLabels.push(formatDate(Math.round(data.data.result[0].value[0] * 1000), 'mediumTime', 'en-US'));
+        if (this.barChartData[0].data.length >= 20){
+          this.barChartData[0].data.shift();
+          this.barChartLabels.shift();
+        }
+
       });
   }
 
   ngOnInit() {
-    setInterval(this.showConfig, 3000);
+    setInterval(this.showConfig, 2000);
   }
 }
