@@ -1,23 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ConfigService, Result} from "./config/config.service";
+import {formatDate} from "@angular/common";
 @Component({
   selector: 'Duration',
   templateUrl: './duration.component.html',
-  styleUrls: ['./duration.component.css']
+  styleUrls: ['./duration.component.css'],
+  providers: [ConfigService]
 })
 export class DurationComponent implements OnInit {
-  constructor() { }
+  constructor(private configService: ConfigService, private ref: ChangeDetectorRef) {
+    this.showConfig = this.showConfig.bind(this);
+  }
   public barChartOptions = {
     scaleShowVerticalLines: false,
     responsive: true
   };
-  public barChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-  public barChartType = 'bar';
+  public barChartLabels = [];
+  public barChartType = 'line';
   public barChartLegend = true;
   public barChartData = [
-    {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-    {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
+    {data: [], label: 'mean duration'},
   ];
+
+  showConfig() {
+    this.configService.getDuration()
+      .subscribe((data:Result) =>  {
+        this.barChartData[0].data.push(data.data.result[0].value[1]);
+        this.barChartLabels.push(formatDate(Math.round(data.data.result[0].value[0] * 1000), 'mediumTime', 'en-US'));
+      });
+  }
+
   ngOnInit() {
-    console.log("OK");
+    setInterval(this.showConfig, 3000);
   }
 }

@@ -28,7 +28,7 @@ import {DurationComponent} from "./duration.component";
     ChartsModule,
     BrowserAnimationsModule,
     MatTabsModule,
-    MatIconModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
