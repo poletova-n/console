@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ConfigService, Result} from "./config/config.service";
+import {formatDate} from "@angular/common";
 @Component({
   selector: 'Throughput',
   templateUrl: './throughput.component.html',
@@ -25,15 +26,26 @@ export class ThroughputComponent implements OnInit {
 
   showOperations() {
     const self = this;
-    const timestamp = Math.round(Date.now() / 1000);
-    this.configService.getSuccessOperations(timestamp).subscribe((resSuccess: Result) => {
-      self.configService.getFailedOperations(timestamp).subscribe((resFailed: Result) => {
-        const valSuccess = resSuccess.data.result[0].values[0];
-        const valFailed = resFailed.data.result[0].values[0];
+    this.configService.getSuccessOperations(2).subscribe((resSuccess: Result) => {
 
-        self.barChartData[0].data.push(valSuccess[1]);
-        self.barChartData[1].data.push(valFailed[1]);
-        self.barChartLabels.push(valSuccess[0]);
+      self.configService.getFailedOperations(2).subscribe((resFailed: Result) => {
+        if (resSuccess.data.result.length > 0) {
+          const valSuccess = resSuccess.data.result[0].values[0];
+          self.barChartData[0].data.push(valSuccess[1]);
+        }
+        else {
+          self.barChartData[0].data.push(self.barChartData[0].data[self.barChartData[0].data.length - 1]);
+        }
+
+        if (resFailed.data.result.length > 0) {
+          const valFailed = resFailed.data.result[0].values[0];
+          self.barChartData[1].data.push(valFailed[1]);
+        }
+        else {
+          self.barChartData[1].data.push(self.barChartData[1].data[self.barChartData[1].data.length - 1]);
+        }
+
+        self.barChartLabels.push(formatDate(Date.now(), 'mediumTime', 'en-US'));
         if (this.barChartLabels.length >= 20){
           this.barChartData[0].data.shift();
           this.barChartData[1].data.shift();

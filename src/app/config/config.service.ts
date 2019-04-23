@@ -10,8 +10,10 @@ export class ConfigService {
   constructor(private http: HttpClient) { }
   durationUrl = "http://localhost:9090/api/v1/query?query=mongoose_duration_mean";
   bandwidthUrl = "http://localhost:9090/api/v1/query?query=mongoose_byte_rate_mean";
-  successOpUrl = "http://localhost:9090/api/v1/query_range?query=mongoose_success_op_rate_mean&step=1";
-  failedOpUrl = "http://localhost:9090/api/v1/query_range?query=mongoose_failed_op_rate_mean&step=1";
+  successOpUrl = "http://localhost:9090/api/v1/query?query=mongoose_success_op_rate_mean";
+  failedOpUrl = "http://localhost:9090/api/v1/query?query=mongoose_failed_op_rate_mean";
+  latencyMinUrl = "http://localhost:9090/api/v1/query?query=mongoose_latency_min";
+  latencyMaxUrl = "http://localhost:9090/api/v1/query?query=mongoose_latency_max";
 
   getDuration() {
     return this.http.get(this.durationUrl);
@@ -22,11 +24,18 @@ export class ConfigService {
   }
 
   getSuccessOperations(timestamp = 1) {
-    return this.http.get(this.successOpUrl + "&start=" + timestamp + "&end=" + timestamp);
+    return this.http.get(this.successOpUrl + "[" + timestamp + "s]");
   }
 
-  getFailedOperations(timestamp) {
-    return this.http.get(this.failedOpUrl + "&start=" + timestamp + "&end=" + timestamp);
+  getFailedOperations(timestamp = 1) {
+    return this.http.get(this.failedOpUrl + "[" + timestamp + "s]");
   }
 
+  getLatencyMin(timestamp = 1) {
+    return this.http.get(this.latencyMinUrl + "[" + timestamp + "s]");
+  }
+
+  getLatencyMax(timestamp = 1) {
+    return this.http.get(this.latencyMaxUrl + "[" + timestamp + "s]");
+  }
 }
